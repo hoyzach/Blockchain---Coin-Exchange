@@ -15,7 +15,7 @@ const AppHeader = styled.header`
 const AppLogo = styled.img`
     height: 8rem;
     pointer-events: none;
-    @keyframes { 
+    @keyframes App-logo-spin { 
         from {
             transform: rotate(0deg);
         }

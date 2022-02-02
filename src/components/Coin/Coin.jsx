@@ -8,39 +8,10 @@ const CoinCell = styled.td`
 `;
 
 export default class Coin extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-    /*
-    componentDidMount() {
-        const callback = () => {
-            //set the state to a new random value
-            const randomPercentage = 0.995 + Math.random() * 0.01;
-
-            this.setState( function(oldState) {
-                return {
-                    price: oldState.price * randomPercentage
-                };
-            });
-        }
-        setInterval( callback, 1000 )
-    }
-    */
-    handleClick(event)  {
+    handleClick = (event) => {
         //Prevent the default action of submitting the form
         event.preventDefault();
-
         this.props.handleRefresh(this.props.ticker);
-        /*
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        
-        this.setState( function(oldState) {
-            return {
-                price: oldState.price * randomPercentage
-            };
-        });
-        */
     }
     
     render() {

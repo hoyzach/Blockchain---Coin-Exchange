@@ -3,14 +3,25 @@ import CoinList from './components/CoinList/CoinList.jsx';
 import Header from './components/Header/Header.jsx';
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const AppDiv = styled.div`
   text-align: center;
   background-color: rgb(20,56,97);
   color: #cccccc;
-`
+`;
+
+const COIN_COUNT = 10;
+
+function fixLength(_amount) {
+  if( _amount > 10) {
+    return parseFloat(_amount.toFixed(2));
+  }
+  else { return parseFloat(_amount.toFixed(4)); }
+}
+
 class App extends React.Component {
-  state = {
+ state = {
     balance: 10000,
     showBalance: true,
     coinData: [
@@ -39,19 +50,34 @@ class App extends React.Component {
         price: 0.20
       }
     ]
+  } 
+  componentDidMount = async() => {
+    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
+    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+    const tickerUrl = 'https://api.coinpaprika.com/v1/tickers/';
+    const promises = coinIds.map(id => axios.get(tickerUrl + id));
+    const coinData = await Promise.all(promises);
+    const coinPriceData = coinData.map(function(response) {
+      const coin = response.data;
+      return {
+        key: coin.id,
+        name: coin.name,
+        ticker: coin.symbol,
+        balance: 0,
+        price: fixLength(coin.quotes.USD.price),
+      };
+    })
+    this.setState({ coinData : coinPriceData });
   }
 
-  handleRefresh = valueChangeTicker => {
+  handleRefresh = async (valueChangeId) => {
+    const tickerUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const response = await axios.get(tickerUrl);
+    const newPrice = fixLength(response.data.quotes.USD.price);
     const newCoinData = this.state.coinData.map( function( values ) {
       let newValues = { ...values };
-      if ( valueChangeTicker === newValues.ticker ) {
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        if ((newValues.price *= randomPercentage) >= 10) {
-          newValues.price = (newValues.price *= randomPercentage).toFixed(2);
-        }
-          else{
-            newValues.price = (newValues.price * randomPercentage).toFixed(4);
-          }
+      if ( valueChangeId === values.key ) {
+        newValues.price = newPrice;
       }
       return newValues;
     });

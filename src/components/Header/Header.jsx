@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 const AppHeader = styled.header`
     background-color: #282c34;
-    min-height: 20vh;
+    min-height: 10vh;
+    width: 100%
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -13,6 +14,7 @@ const AppHeader = styled.header`
 `;
 
 const AppLogo = styled.img`
+    margin: 1rem;
     height: 8rem;
     pointer-events: none;
     @keyframes App-logo-spin { 
@@ -28,6 +30,9 @@ const AppLogo = styled.img`
 
 const AppTitle = styled.h1`
     font-size: 4rem;
+    line-height: 12rem;
+    font-weight: bold;
+    min-width: 300px;
 `;
 
 export default class Header extends Component {

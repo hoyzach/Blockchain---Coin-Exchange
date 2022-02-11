@@ -5,6 +5,10 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import styled from 'styled-components';
 import axios from 'axios';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootswatch/dist/flatly/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/js/all';
+
 const AppDiv = styled.div`
   text-align: center;
   background-color: rgb(20,56,97);
@@ -13,16 +17,9 @@ const AppDiv = styled.div`
 
 const COIN_COUNT = 10;
 
-function fixLength(_amount) {
-  if( _amount > 10) {
-    return parseFloat(_amount.toFixed(2));
-  }
-  else { return parseFloat(_amount.toFixed(4)); }
-}
-
 function App(props) {
   const [balance, setBalance] = useState(10000);
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
 
 
@@ -39,7 +36,7 @@ function App(props) {
         name: coin.name,
         ticker: coin.symbol,
         balance: 0,
-        price: fixLength(coin.quotes.USD.price),
+        price: coin.quotes.USD.price,
       };
     })
     setCoinData(coinPriceData);
@@ -54,10 +51,27 @@ function App(props) {
     } */
     });
 
+  const handleBrrrr = () => {
+    setBalance( oldBalance => oldBalance + 1200);
+  }
+
+  const handleTransaction = (isBuy, valueChangeId) => {
+    var balanceChange = isBuy ? 1 : -1;
+    const newCoinData = coinData.map( function(values) {
+      let newValues = {...values};
+      if ( valueChangeId === values.key) {
+        newValues.balance += balanceChange;
+        setBalance( oldBalance => oldBalance - balanceChange * newValues.price );
+      }
+      return newValues;
+    })
+    setCoinData(newCoinData);
+  }
+
   const handleRefresh = async (valueChangeId) => {
     const tickerUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(tickerUrl);
-    const newPrice = fixLength(response.data.quotes.USD.price);
+    const newPrice = response.data.quotes.USD.price;
     const newCoinData = coinData.map( function( values ) {
       let newValues = { ...values };
       if ( valueChangeId === values.key ) {
@@ -77,12 +91,14 @@ function App(props) {
         <Header />
         <AccountBalance 
           amount={balance} 
-          showBalance={showBalance} 
+          showBalance={showBalance}
+          handleBrrrr={handleBrrrr}
           toggleBalance={toggleBalance} 
         />
         <CoinList 
           coinData={coinData} 
           handleRefresh={handleRefresh}
+          handleTransaction={handleTransaction}
           showBalance={showBalance} 
         />
       </AppDiv>

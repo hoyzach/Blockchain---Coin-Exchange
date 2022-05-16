@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Blockchain---Coin-Exchange/static/css/main.2e8528ad.css",
+    "main.js": "/Blockchain---Coin-Exchange/static/js/main.038d4da1.js",
+    "static/js/787.5eeded1b.chunk.js": "/Blockchain---Coin-Exchange/static/js/787.5eeded1b.chunk.js",
+    "static/media/logo.svg": "/Blockchain---Coin-Exchange/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/Blockchain---Coin-Exchange/index.html",
+    "main.2e8528ad.css.map": "/Blockchain---Coin-Exchange/static/css/main.2e8528ad.css.map",
+    "main.038d4da1.js.map": "/Blockchain---Coin-Exchange/static/js/main.038d4da1.js.map",
+    "787.5eeded1b.chunk.js.map": "/Blockchain---Coin-Exchange/static/js/787.5eeded1b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e8528ad.css",
+    "static/js/main.038d4da1.js"
+  ]
+}
